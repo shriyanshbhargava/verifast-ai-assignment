@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { format, formatDistanceToNow } from "date-fns";
-import { FaUser, FaSpinner, FaSearch, FaCalendar } from "react-icons/fa";
+import {  FaSpinner, FaSearch, FaCalendar } from "react-icons/fa";
 import Avatar from "../assets/images/avatar.png";
 import Snackbar from "../components/snackbar";
 
@@ -128,13 +128,14 @@ export default function MessagingInterface() {
   });
 
   return (
-    <div className="flex h-screen bg-gray-50 font-sans">
+    <div className="flex h-screen flex-col md:flex-row bg-gray-50 font-sans">
       <Snackbar
         message={error || ""}
         isVisible={isSnackbarVisible}
         onClose={() => setSnackbarVisible(false)}
       />
 
+      {/* Sidebar for Sessions */}
       <div className="w-full md:w-1/3 lg:w-1/4 bg-white border-r overflow-hidden flex flex-col">
         <div className="p-4 border-b bg-white flex items-center justify-between">
           <h1 className="text-xl font-semibold text-gray-800">Chat Sessions Dashboard</h1>
@@ -187,7 +188,9 @@ export default function MessagingInterface() {
             <div
               key={session.id}
               ref={index === filteredSessions.length - 1 ? lastSessionElementRef : null}
-              className={`flex items-center p-4 hover:bg-purple-50 cursor-pointer ${selectedSession === session.id ? "bg-purple-100" : ""}`}
+              className={`flex items-center p-4 hover:bg-purple-50 cursor-pointer ${
+                selectedSession === session.id ? "bg-purple-100" : ""
+              }`}
               onClick={() => handleSessionClick(session.id)}
             >
               <div className="w-10 h-10 rounded-full bg-orange-300 flex items-center justify-center overflow-hidden">
@@ -214,7 +217,8 @@ export default function MessagingInterface() {
         </div>
       </div>
 
-      <div className="hidden md:flex flex-1 flex-col bg-gray-50">
+      {/* Chat Messages Section */}
+      <div className="flex-1 flex flex-col bg-gray-50">
         {selectedSession ? (
           <>
             <div className="flex items-center p-4 border-b bg-white">
@@ -233,16 +237,22 @@ export default function MessagingInterface() {
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`mb-4 flex flex-col ${message.action === "USER" ? "items-end" : "items-start"}`}
+                  className={`mb-4 flex flex-col ${
+                    message.action === "USER" ? "items-end" : "items-start"
+                  }`}
                 >
                   <div
                     className={`max-w-[70%] p-3 rounded-lg ${
-                      message.action === "USER" ? "bg-rhino-950 text-white" : "bg-midnight-950 text-white"
+                      message.action === "USER"
+                        ? "bg-rhino-950 text-white"
+                        : "bg-midnight-950 text-white"
                     }`}
                   >
                     {message.content}
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">{formatMessageTimestamp(message.timestamp)}</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {formatMessageTimestamp(message.timestamp)}
+                  </p>
                 </div>
               ))}
             </div>
